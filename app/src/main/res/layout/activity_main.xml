@@ -19,6 +19,7 @@
             android:textAlignment="center"/>
 
         <EditText
+            android:id="@+id/carCost"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,6 +41,7 @@
             android:textAlignment="center"/>
 
         <EditText
+            android:id="@+id/downPayment"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -61,6 +63,7 @@
             android:textAlignment="center"/>
 
         <EditText
+            android:id="@+id/aprCost"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -79,14 +82,16 @@
         android:orientation="horizontal">
 
         <RadioButton
+            android:id="@+id/radioLoan"
             android:layout_weight="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Loan"/>
+            android:text="Loan"
+            android:checked="true"/>
 
         <RadioButton
+            android:id="@+id/radioLease"
             android:layout_weight="1"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Lease"/>
@@ -110,9 +115,10 @@
             />
 
         <TextView
+            android:id="@+id/numMonths"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="36"
+            android:text="30"
             />
 
     </LinearLayout>
@@ -123,8 +129,8 @@
         android:layout_below="@id/length"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:progress="36"
-        android:max="50"
+        android:progress="30"
+        android:max="60"
         />
 
     <TextView
