@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
                 new TextView.OnEditorActionListener() {
                     @Override
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if(!(downPayment.getText() + "").equals("") && !(aprCost.getText() + "").equals("")) {
+                        if(!(aprCost.getText() + "").equals("") && !(downPayment.getText() + "").equals("") && !(carCost.getText() + "").equals("")){
                             calculatePayment();
                         }
                         return false;
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 new TextView.OnEditorActionListener() {
                     @Override
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if(!(carCost.getText() + "").equals("") && !(aprCost.getText() + "").equals("")) {
+                        if(!(aprCost.getText() + "").equals("") && !(downPayment.getText() + "").equals("") && !(carCost.getText() + "").equals("")){
                             calculatePayment();
                         }
                         return false;
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 new TextView.OnEditorActionListener() {
                     @Override
                     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if(!(downPayment.getText() + "").equals("") && !(carCost.getText() + "").equals("")) {
+                        if(!(aprCost.getText() + "").equals("") && !(downPayment.getText() + "").equals("") && !(carCost.getText() + "").equals("")){
                             calculatePayment();
                         }
                         return false;
@@ -89,7 +89,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+
         monthlyPayment = findViewById(R.id.monthlyPayment);
+        if(savedInstanceState != null) {
+            monthlyPayment.setText(savedInstanceState.getString("MONTHLY"));
+        }
+
         numMonths = findViewById(R.id.numMonths);
         seek = findViewById(R.id.seekBar);
         seek.setOnSeekBarChangeListener(
@@ -115,19 +120,37 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putString("MONTHLY", monthlyPayment.getText().toString());
+
+    }
+
     private void calculatePayment() {
         // P = mr*L/(1-(1+mr)^-n) mr = apr, L = loanPayment, n = # of payments
         Double m = Double.parseDouble(aprCost.getText() + "") / 1200;
         double dp = Double.parseDouble(downPayment.getText() + ""); // down payment
         Double L = Double.parseDouble(carCost.getText() + "");
+        double total = L - dp;
         int n = Integer.parseInt(seek.getProgress() + "");
+
+
 
         if(radioLease.isChecked()) {
             n = 36;
             L /= 3;
         }
 
-        Double p = (m * (L - dp)) / (1 - Math.pow(1 + m, -n));
-        monthlyPayment.setText("$" + String.format("%.2f", p));
+        if(m > 0 && total >= 0) {
+            Double p = (m * (total)) / (1 - Math.pow(1 + m, -n));
+            monthlyPayment.setText("$" + String.format("%.2f", p));
+        } else if (m <= 0){
+            Toast.makeText(this, "Apr must be bigger than 0!", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "The down payment can't be bigger than the cost!", Toast.LENGTH_LONG).show();
+        }
+
+
     }
 }
