@@ -132,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
         Double m = Double.parseDouble(aprCost.getText() + "") / 1200;
         double dp = Double.parseDouble(downPayment.getText() + ""); // down payment
         Double L = Double.parseDouble(carCost.getText() + "");
-        double total = L - dp;
         int n = Integer.parseInt(seek.getProgress() + "");
 
 
@@ -142,11 +141,15 @@ public class MainActivity extends AppCompatActivity {
             L /= 3;
         }
 
+        double total = L - dp;
+
         if(m > 0 && total >= 0) {
             Double p = (m * (total)) / (1 - Math.pow(1 + m, -n));
             monthlyPayment.setText("$" + String.format("%.2f", p));
         } else if (m <= 0){
             Toast.makeText(this, "Apr must be bigger than 0!", Toast.LENGTH_LONG).show();
+        } else if(radioLease.isChecked()) {
+            Toast.makeText(this, "Cost must be at least three times greater than down payment for a lease!", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "The down payment can't be bigger than the cost!", Toast.LENGTH_LONG).show();
         }
